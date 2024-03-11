@@ -1,0 +1,7 @@
+sqlalchemy
+pydantic
+bcrypt
+psycopg2-binary
+httpx
+pytest
+pyjwt
