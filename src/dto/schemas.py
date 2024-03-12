@@ -13,14 +13,14 @@ class User(BaseModel):
     email: str
     role: UserRole
 
-class ChangeUser(User):
+class UserWithSensitiveData(User):
     password: Optional[str]
 
 class CoefficientSetup(BaseModel):
     model_config = {"from_attributes": True}
 
-    id: int
-    user_id: int
+    id: Optional[int]
+    user_id: Optional[int]
     alpha: float
     beta: float
     mu: float
@@ -29,7 +29,7 @@ class CoefficientSetup(BaseModel):
     n: float
 
 class CalculationResult(BaseModel):
-    model_config = {"from_attributes": True}
+    model_config = {"from_attributes": True, "arbitrary_types_allowed": True}
 
     id: int
     user_id: int

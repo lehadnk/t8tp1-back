@@ -18,7 +18,7 @@ class CoefficientSetup(Base):
     __tablename__ = 'coefficient_setups'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
     name = Column(String)
     alpha = Column(Float(precision=2))
     beta = Column(Float(precision=2))
@@ -30,10 +30,10 @@ class CoefficientSetup(Base):
     user = relationship("User")
 
 class CalculationResult(Base):
-    __tablename__ = 'experiment_results'
+    __tablename__ = 'calculation_results'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'))
     calculated_at = Column(DateTime, default=func.now())
     alpha = Column(Float(precision=2))
     beta = Column(Float(precision=2))

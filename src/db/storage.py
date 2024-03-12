@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.authentication.authentication import PasswordEncoder
 from src.db.models import User, CoefficientSetup, CalculationResult
-from src.dto.schemas import User as UserDto, ChangeUser
+from src.dto.schemas import User as UserDto, UserWithSensitiveData
 from src.dto.schemas import CoefficientSetup as CoefficientSetupDto
 from src.dto.schemas import CalculationResult as CalculationResultDto
 from src.dto.dtos import PaginatedEntityList
@@ -15,8 +15,12 @@ from src.dto.dtos import PaginatedEntityList
 def get_user_by_id(session: Session, user_id: int) -> Optional[User]:
     return session.query(User).filter(User.id == user_id).first()
 
-def get_user_by_email(session: Session, email: str) -> Optional[User]:
-    return session.query(User).filter(User.email == email).first()
+def get_user_by_email(session: Session, email: str) -> Optional[UserWithSensitiveData]:
+    user = session.query(User).filter(User.email == email).first()
+    if not user:
+        return None
+
+    return UserWithSensitiveData(**user.__dict__)
 
 def get_user_list(session: Session, page: int, page_size: int) -> PaginatedEntityList[UserDto]:
     offset = (page - 1) * page_size
@@ -26,7 +30,7 @@ def get_user_list(session: Session, page: int, page_size: int) -> PaginatedEntit
 
     return PaginatedEntityList[UserDto](items=users, total=users_count, page=page, page_size=page_size)
 
-def save_user(session: Session, user_dto: ChangeUser) -> UserDto:
+def save_user(session: Session, user_dto: UserWithSensitiveData) -> UserDto:
     if user_dto.password is not None:
         password_encoder = PasswordEncoder()
         user_dto.password = password_encoder.encode(user_dto.password)
@@ -53,7 +57,7 @@ def get_coefficient_setup_list(session: Session, page: int, page_size: int) -> P
     coefficient_setups = [CoefficientSetupDto(**cs.__dict__) for cs in query.offset(offset).limit(page_size).all()]
     coefficient_setup_count = query.count()
 
-    return PaginatedEntityList[CoefficientSetup](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size)
+    return PaginatedEntityList[CoefficientSetupDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size)
 
 def save_coefficient_setup(session: Session, coefficient_setup_dto: CoefficientSetupDto):
     db_model = CoefficientSetup(**coefficient_setup_dto.dict())
@@ -72,7 +76,7 @@ def get_calculation_result_list(session: Session, page: int, page_size: int) -> 
     coefficient_setups = [CalculationResultDto(**cr.__dict__) for cr in query.offset(offset).limit(page_size).all()]
     coefficient_setup_count = query.count()
 
-    return PaginatedEntityList[CalculationResult](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size)
+    return PaginatedEntityList[CalculationResultDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size)
 
 def save_calculation_result(session: Session, calculation_result_dto: CalculationResultDto):
     db_model = CalculationResult(**calculation_result_dto.dict())
