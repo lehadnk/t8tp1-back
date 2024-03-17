@@ -20,11 +20,6 @@ Content-Type: application/json
 
 ###
 
-GET http://127.0.0.1:8000/hello/User
-Accept: application/json
-
-###
-
 POST http://127.0.0.1:8000/coefficient_setups/
 Accept: application/json
 Content-Type: application/json

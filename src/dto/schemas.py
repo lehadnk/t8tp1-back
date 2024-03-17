@@ -21,6 +21,7 @@ class CoefficientSetup(BaseModel):
 
     id: Optional[int]
     user_id: Optional[int]
+    name: Optional[str]
     alpha: float
     beta: float
     mu: float

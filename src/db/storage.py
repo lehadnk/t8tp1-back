@@ -2,6 +2,7 @@ import math
 from typing import Optional
 import bcrypt
 from fastapi import HTTPException
+from sqlalchemy import desc
 
 from sqlalchemy.orm import Session
 
@@ -26,7 +27,7 @@ def get_user_by_email(session: Session, email: str) -> Optional[UserWithSensitiv
 def get_user_list(session: Session, page: int, page_size: int) -> PaginatedEntityList[UserDto]:
     offset = (page - 1) * page_size
     query = session.query(User)
-    users = [UserDto(**u.__dict__) for u in query.order_by("id").offset(offset).limit(page_size).all()]
+    users = [UserDto(**u.__dict__) for u in query.order_by(desc(User.id)).offset(offset).limit(page_size).all()]
     users_count = query.count()
 
     return PaginatedEntityList[UserDto](items=users, total=users_count, page=page, page_size=page_size, pages=math.ceil(users_count / page_size))
@@ -55,14 +56,23 @@ def save_user(session: Session, user_dto: UserWithSensitiveData) -> UserDto:
 def get_coefficient_setup_list(session: Session, page: int, page_size: int) -> PaginatedEntityList[CoefficientSetupDto]:
     offset = (page - 1) * page_size
     query = session.query(CoefficientSetup)
-    coefficient_setups = [CoefficientSetupDto(**cs.__dict__) for cs in query.offset(offset).limit(page_size).all()]
+    coefficient_setups = [CoefficientSetupDto(**cs.__dict__) for cs in query.order_by(desc(CoefficientSetup.id)).offset(offset).limit(page_size).all()]
     coefficient_setup_count = query.count()
 
     return PaginatedEntityList[CoefficientSetupDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size, pages=math.ceil(coefficient_setup_count / page_size))
 
 def save_coefficient_setup(session: Session, coefficient_setup_dto: CoefficientSetupDto):
-    db_model = CoefficientSetup(**coefficient_setup_dto.dict())
-    session.add(db_model)
+    if coefficient_setup_dto.id is not None:
+        coefficient_setup = get_coefficient_setup_by_id(session, coefficient_setup_dto.id)
+        if not coefficient_setup:
+            raise HTTPException(status_code=404, detail="Coefficient setup not found")
+
+        for key, value in coefficient_setup_dto.dict().items():
+            setattr(coefficient_setup, key, value)
+    else:
+        coefficient_setup = CoefficientSetup(**coefficient_setup_dto.dict())
+
+    session.add(coefficient_setup)
     session.commit()
 
 def delete_coefficient_setup(session: Session, coefficient_setup_id: int):
@@ -74,7 +84,7 @@ def get_coefficient_setup_by_id(session: Session, coefficient_setup_id: int) -> 
 def get_calculation_result_list(session: Session, page: int, page_size: int) -> PaginatedEntityList[CalculationResultDto]:
     offset = (page - 1) * page_size
     query = session.query(CalculationResult)
-    coefficient_setups = [CalculationResultDto(**cr.__dict__) for cr in query.offset(offset).limit(page_size).all()]
+    coefficient_setups = [CalculationResultDto(**cr.__dict__) for cr in query.order_by(desc(CalculationResult.id)).offset(offset).limit(page_size).all()]
     coefficient_setup_count = query.count()
 
     return PaginatedEntityList[CalculationResultDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size, pages=math.ceil(coefficient_setup_count / page_size))
