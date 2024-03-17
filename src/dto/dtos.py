@@ -8,4 +8,5 @@ class PaginatedEntityList(BaseModel, Generic[T]):
     items: list[T]
     total: int
     page: int
+    pages: int
     page_size: int

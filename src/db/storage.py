@@ -1,3 +1,4 @@
+import math
 from typing import Optional
 import bcrypt
 from fastapi import HTTPException
@@ -25,10 +26,10 @@ def get_user_by_email(session: Session, email: str) -> Optional[UserWithSensitiv
 def get_user_list(session: Session, page: int, page_size: int) -> PaginatedEntityList[UserDto]:
     offset = (page - 1) * page_size
     query = session.query(User)
-    users = [UserDto(**u.__dict__) for u in query.offset(offset).limit(page_size).all()]
+    users = [UserDto(**u.__dict__) for u in query.order_by("id").offset(offset).limit(page_size).all()]
     users_count = query.count()
 
-    return PaginatedEntityList[UserDto](items=users, total=users_count, page=page, page_size=page_size)
+    return PaginatedEntityList[UserDto](items=users, total=users_count, page=page, page_size=page_size, pages=math.ceil(users_count / page_size))
 
 def save_user(session: Session, user_dto: UserWithSensitiveData) -> UserDto:
     if user_dto.password is not None:
@@ -57,7 +58,7 @@ def get_coefficient_setup_list(session: Session, page: int, page_size: int) -> P
     coefficient_setups = [CoefficientSetupDto(**cs.__dict__) for cs in query.offset(offset).limit(page_size).all()]
     coefficient_setup_count = query.count()
 
-    return PaginatedEntityList[CoefficientSetupDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size)
+    return PaginatedEntityList[CoefficientSetupDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size, pages=math.ceil(coefficient_setup_count / page_size))
 
 def save_coefficient_setup(session: Session, coefficient_setup_dto: CoefficientSetupDto):
     db_model = CoefficientSetup(**coefficient_setup_dto.dict())
@@ -76,9 +77,13 @@ def get_calculation_result_list(session: Session, page: int, page_size: int) -> 
     coefficient_setups = [CalculationResultDto(**cr.__dict__) for cr in query.offset(offset).limit(page_size).all()]
     coefficient_setup_count = query.count()
 
-    return PaginatedEntityList[CalculationResultDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size)
+    return PaginatedEntityList[CalculationResultDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size, pages=math.ceil(coefficient_setup_count / page_size))
 
 def save_calculation_result(session: Session, calculation_result_dto: CalculationResultDto):
     db_model = CalculationResult(**calculation_result_dto.dict())
     session.add(db_model)
     session.commit()
+
+
+def get_calculation_result_by_id(session: Session, id: int) -> CalculationResult:
+    return session.query(CalculationResult).filter(CalculationResult.id == id).first()

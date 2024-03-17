@@ -49,7 +49,6 @@ def require_researcher_authorization(request: Request) -> User:
 
     return user
 
-
 @app.get("/users/", response_model=PaginatedEntityList[User])
 async def get_user_list(page: int = 1, page_size: int = 10, db_session: Session = Depends(get_db_session), admin: User = Depends(require_admin_authorization)):
     users = storage.get_user_list(db_session, page, page_size)
@@ -86,6 +85,10 @@ async def authenticate_user(request: UserAuthenticationRequest, db_session: Sess
     token = jwt_encoder.encode(user)
     return UserAuthenticationResponse(auth_token=token)
 
+@app.get("/auth/profile/", response_model=User)
+async def get_user_profile(user: User = Depends(require_any_authentication)):
+    return user
+
 @app.get("/coefficient_setups/", response_model=PaginatedEntityList[CoefficientSetup])
 async def get_coefficient_setup_list(page: int = 1, page_size: int = 10, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
     return storage.get_coefficient_setup_list(db_session, page, page_size)
@@ -109,6 +112,7 @@ async def save_coefficient_setup(id: int, db_session: Session = Depends(get_db_s
         raise HTTPException(status_code=404, detail="Coefficient Setup does not exist")
 
     calculation_result = CalculationResult(**(coefficient_setup.__dict__ | {"t1": 1, "t2": 1, "s": 1, "calculated_at": datetime.now()}))
+    calculation_result.id = None
     storage.save_calculation_result(db_session, calculation_result)
 
     return calculation_result
@@ -116,3 +120,7 @@ async def save_coefficient_setup(id: int, db_session: Session = Depends(get_db_s
 @app.get("/calculation_results/", response_model=PaginatedEntityList[CalculationResult])
 async def get_calculation_result_list(page: int = 1, page_size: int = 10, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
     return storage.get_calculation_result_list(db_session, page, page_size)
+
+@app.get("/calculation_results/{id}/", response_model=CalculationResult)
+async def get_calculation_result_by_id(id: int, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
+    return storage.get_calculation_result_by_id(db_session, id)

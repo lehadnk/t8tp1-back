@@ -16,7 +16,7 @@ POST http://127.0.0.1:8000/auth/login/
 Accept: application/json
 Content-Type: application/json
 
-{"email": "lehadnk2@gmail.com", "password": "qwe"}
+{"email": "admin@test.com", "password": "admin"}
 
 ###
 
@@ -24,3 +24,27 @@ GET http://127.0.0.1:8000/hello/User
 Accept: application/json
 
 ###
+
+POST http://127.0.0.1:8000/coefficient_setups/
+Accept: application/json
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJsZWhhZG5rQGdtYWlsLmNvbSIsInJvbGUiOiJyZXNlYXJjaGVyIiwicGFzc3dvcmQiOiIkMmIkMTIkN1N2dXdnR2haeS9ZV2w1Zko3OHNHLlZYQThqazFPS3g3VHlndVk5ZkVsRFU5bnlkTjcxQXUifQ.uZVWjKgW-Wg_tM13QRBf-Nd5i1KnKNGg6vWccortSZU
+
+{
+  "id": null,
+  "name": "Test",
+  "alpha": 1,
+  "beta": 1,
+  "mu": 1,
+  "g": 1,
+  "a": 1,
+  "n": 1,
+  "user_id": 3
+}
+
+###
+
+POST http://127.0.0.1:8000/coefficient_setups/4/calculate/
+Accept: application/json
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJsZWhhZG5rQGdtYWlsLmNvbSIsInJvbGUiOiJyZXNlYXJjaGVyIiwicGFzc3dvcmQiOiIkMmIkMTIkN1N2dXdnR2haeS9ZV2w1Zko3OHNHLlZYQThqazFPS3g3VHlndVk5ZkVsRFU5bnlkTjcxQXUifQ.uZVWjKgW-Wg_tM13QRBf-Nd5i1KnKNGg6vWccortSZU
