@@ -39,7 +39,14 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJsZWhh
 
 ###
 
-POST http://127.0.0.1:8000/coefficient_setups/4/calculate/
+POST http://127.0.0.1:8000/coefficient_setups/7/calculate/
+Accept: application/json
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJsZWhhZG5rQGdtYWlsLmNvbSIsInJvbGUiOiJyZXNlYXJjaGVyIiwicGFzc3dvcmQiOiIkMmIkMTIkN1N2dXdnR2haeS9ZV2w1Zko3OHNHLlZYQThqazFPS3g3VHlndVk5ZkVsRFU5bnlkTjcxQXUifQ.uZVWjKgW-Wg_tM13QRBf-Nd5i1KnKNGg6vWccortSZU
+
+###
+
+OPTIONS http://127.0.0.1:8000/coefficient_setups/7/calculate/
 Accept: application/json
 Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJsZWhhZG5rQGdtYWlsLmNvbSIsInJvbGUiOiJyZXNlYXJjaGVyIiwicGFzc3dvcmQiOiIkMmIkMTIkN1N2dXdnR2haeS9ZV2w1Zko3OHNHLlZYQThqazFPS3g3VHlndVk5ZkVsRFU5bnlkTjcxQXUifQ.uZVWjKgW-Wg_tM13QRBf-Nd5i1KnKNGg6vWccortSZU

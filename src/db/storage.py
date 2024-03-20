@@ -1,6 +1,5 @@
 import math
 from typing import Optional
-import bcrypt
 from fastapi import HTTPException
 from sqlalchemy import desc
 
@@ -89,10 +88,14 @@ def get_calculation_result_list(session: Session, page: int, page_size: int) -> 
 
     return PaginatedEntityList[CalculationResultDto](items=coefficient_setups, total=coefficient_setup_count, page=page, page_size=page_size, pages=math.ceil(coefficient_setup_count / page_size))
 
-def save_calculation_result(session: Session, calculation_result_dto: CalculationResultDto):
+def save_calculation_result(session: Session, calculation_result_dto: CalculationResultDto) -> CalculationResultDto:
     db_model = CalculationResult(**calculation_result_dto.dict())
     session.add(db_model)
     session.commit()
+    session.refresh(db_model)
+    calculation_result_dto.id = db_model.id
+
+    return calculation_result_dto
 
 
 def get_calculation_result_by_id(session: Session, id: int) -> CalculationResult:

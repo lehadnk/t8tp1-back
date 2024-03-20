@@ -2,9 +2,11 @@ from datetime import datetime
 
 from fastapi import FastAPI, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
+from starlette.middleware.cors import CORSMiddleware
 
 from src.authentication.authentication import PasswordEncoder
 from src.authentication.jwt import JwtEncoder
+from src.calculation.calculation import calculate
 from src.db import models, storage
 from src.db.config import engine, SessionLocal
 from src.dto.dtos import PaginatedEntityList
@@ -15,6 +17,7 @@ from src.dto.schemas import User, UserWithSensitiveData, UserAuthenticationRespo
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
 def get_db_session():
     db = SessionLocal()
@@ -105,15 +108,14 @@ async def get_coefficient_setup_by_id(id: int, db_session: Session = Depends(get
 async def save_coefficient_setup(request: CoefficientSetup, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
     request.user_id = user.id
     storage.save_coefficient_setup(db_session, request)
-@app.post("/coefficient_setups/{id}/calculate/")
+@app.post("/coefficient_setups/{id}/calculate/", response_model=CalculationResult)
 async def save_coefficient_setup(id: int, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
     coefficient_setup = storage.get_coefficient_setup_by_id(db_session, id)
     if coefficient_setup is None:
         raise HTTPException(status_code=404, detail="Coefficient Setup does not exist")
 
-    calculation_result = CalculationResult(**(coefficient_setup.__dict__ | {"t1": 1, "t2": 1, "s": 1, "calculated_at": datetime.now()}))
-    calculation_result.id = None
-    storage.save_calculation_result(db_session, calculation_result)
+    calculation_result = calculate(coefficient_setup)
+    calculation_result = storage.save_calculation_result(db_session, calculation_result)
 
     return calculation_result
 
