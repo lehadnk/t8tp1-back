@@ -12,5 +12,15 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=pwd
 
+  t8tp1-back:
+    container_name: t8tp1-back
+    volumes:
+      - ./src:/app
+    entrypoint: python -m uvicorn main:app
+    build:
+      dockerfile: ./inf/prod/Dockerfile
+    environment:
+      - POSTGRES_URL=postgresql://postgres:pwd@t8tp1-persistence:5432/postgres
+
 volumes:
   t8tp1-pgdata:
