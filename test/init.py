@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from starlette.testclient import TestClient
@@ -9,7 +11,7 @@ from src.dto.enums import UserRole
 from src.dto.schemas import UserWithSensitiveData
 from src.main import app, get_db_session
 
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:pwd@localhost:5432/tests"
+SQLALCHEMY_DATABASE_URI = os.environ['POSTGRES_URL']
 engine = create_engine(
     SQLALCHEMY_DATABASE_URI
 )
