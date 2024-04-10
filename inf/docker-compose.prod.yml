@@ -3,7 +3,6 @@ services:
   t8tp1-persistence:
     container_name: t8tp1-persistence
     image: postgres:16.2-alpine
-    env_file: .env
     volumes:
       - t8tp1-pgdata:/var/lib/postgresql/data
     ports:
