@@ -1,6 +1,6 @@
 import jwt
 
-from src.dto.schemas import User
+from dto.schemas import User
 
 
 class JwtEncoder:

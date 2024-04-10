@@ -1,17 +1,15 @@
-from datetime import datetime
-
 from fastapi import FastAPI, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from starlette.middleware.cors import CORSMiddleware
 
-from src.authentication.authentication import PasswordEncoder
-from src.authentication.jwt import JwtEncoder
-from src.calculation.calculation import calculate
-from src.db import models, storage
-from src.db.config import engine, SessionLocal
-from src.dto.dtos import PaginatedEntityList
-from src.dto.enums import UserRole
-from src.dto.schemas import User, UserWithSensitiveData, UserAuthenticationResponse, UserAuthenticationRequest, CoefficientSetup, \
+from authentication.authentication import PasswordEncoder
+from authentication.jwt import JwtEncoder
+from calculation.calculation import calculate
+from db import models, storage
+from db.config import engine, SessionLocal
+from dto.dtos import PaginatedEntityList
+from dto.enums import UserRole
+from dto.schemas import User, UserWithSensitiveData, UserAuthenticationResponse, UserAuthenticationRequest, CoefficientSetup, \
     CalculationResult
 
 models.Base.metadata.create_all(bind=engine)

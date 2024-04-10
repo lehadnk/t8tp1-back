@@ -5,12 +5,12 @@ from sqlalchemy import desc
 
 from sqlalchemy.orm import Session
 
-from src.authentication.authentication import PasswordEncoder
-from src.db.models import User, CoefficientSetup, CalculationResult
-from src.dto.schemas import User as UserDto, UserWithSensitiveData
-from src.dto.schemas import CoefficientSetup as CoefficientSetupDto
-from src.dto.schemas import CalculationResult as CalculationResultDto
-from src.dto.dtos import PaginatedEntityList
+from authentication.authentication import PasswordEncoder
+from db.models import User, CoefficientSetup, CalculationResult
+from dto.schemas import User as UserDto, UserWithSensitiveData
+from dto.schemas import CoefficientSetup as CoefficientSetupDto
+from dto.schemas import CalculationResult as CalculationResultDto
+from dto.dtos import PaginatedEntityList
 
 
 def get_user_by_id(session: Session, user_id: int) -> Optional[User]:

@@ -2,8 +2,8 @@ from sqlalchemy import Column, Integer, String, Enum as AchemyEnum, ForeignKey, 
 
 from sqlalchemy.orm import relationship
 
-from .config import Base
-from ..dto.enums import UserRole
+from db.config import Base
+from dto.enums import UserRole
 
 
 class User(Base):

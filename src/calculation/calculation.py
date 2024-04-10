@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from src.calculation.pattern_search import find_maximum_md
-from src.dto.schemas import CoefficientSetup, CalculationResult
+from calculation.pattern_search import find_maximum_md
+from dto.schemas import CoefficientSetup, CalculationResult
 
 
 def calculate(cs: CoefficientSetup) -> CalculationResult:

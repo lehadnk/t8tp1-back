@@ -1,7 +1,9 @@
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:pwd@localhost:5432/postgres"
+SQLALCHEMY_DATABASE_URI = os.environ['POSTGRES_URL']
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URI

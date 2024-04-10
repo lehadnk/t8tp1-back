@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from src.dto.enums import UserRole
+from dto.enums import UserRole
 
 
 class User(BaseModel):

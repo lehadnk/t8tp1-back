@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  t8tp1-persistence:
+    container_name: t8tp1-persistence
+    image: postgres:16.2-alpine
+    env_file: .env
+    volumes:
+      - t8tp1-pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pwd
+
+volumes:
+  t8tp1-pgdata:

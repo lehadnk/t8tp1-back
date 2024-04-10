@@ -25,7 +25,6 @@ def find_local_maximum(f: Callable, args_amount: int, starting_point: list, h: l
                     break
 
             if decrease_h:
-            # if fp > fp1 and fp > fp2 and decrease_h:
                 h[i] = h[i] * 0.5
 
             if h[i] < eps or not decrease_h:
@@ -51,7 +50,6 @@ def find_maximum_md(f: Callable, args_amount: int, p: list, min_values: list, ma
     """
 
     points = [p, find_local_maximum(f, args_amount, p, h.copy(), eps, True)]
-    print(points)
 
     iterations = 0
     while True:
