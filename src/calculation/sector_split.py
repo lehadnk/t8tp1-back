@@ -1,7 +1,7 @@
 from typing import Callable, List, Tuple
 
 
-class SectorSplit: # NaBarabane
+class SectorSplit:  # NaBarabane
     def __init__(self) -> None:
         self.__f = None
         self.__limits = None
@@ -12,7 +12,8 @@ class SectorSplit: # NaBarabane
 
         self.__current_point = None
 
-    def split_scan(self, f: Callable, limits: List[Callable], boundaries: List[Tuple[float]], deltas: list, min_delta: float) -> list:
+    def split_scan(self, f: Callable, limits: List[Callable], boundaries: List[Tuple[float]], deltas: list,
+                   min_delta: float) -> list:
         self.__f = f
         self.__limits = limits
         self.__deltas = deltas
@@ -20,12 +21,12 @@ class SectorSplit: # NaBarabane
         while True:
             self.__walk_through_array(boundaries)
 
-            boundaries = [[self.__max_value_point[i] - self.__deltas[i], self.__max_value_point[i] + self.__deltas[i]] for i, v in enumerate(self.__deltas)]
+            boundaries = [[self.__max_value_point[i] - self.__deltas[i], self.__max_value_point[i] + self.__deltas[i]]
+                          for i, v in enumerate(self.__deltas)]
             self.__deltas = [d * 0.5 for d in self.__deltas]
 
             if self.__deltas[0] <= min_delta:
                 return self.__max_value_point
-
 
     def __walk_through_array(self, boundaries, index=[], dimension=0):
         if dimension == len(boundaries):
@@ -33,7 +34,7 @@ class SectorSplit: # NaBarabane
                 return
 
             point_value = self.__f(*index)
-            if self.__max_value_point is None or point_value > self.__max_point_value:
+            if self.__max_value_point is None or (point_value > self.__max_point_value):
                 self.__max_point_value = point_value
                 self.__max_value_point = index.copy()
         else:
