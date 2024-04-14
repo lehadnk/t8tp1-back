@@ -12,6 +12,7 @@ def calculate(cs: CoefficientSetup) -> CalculationResult:
         lambda t1, t2: t1 - t2 >= -3
     ]
 
+    print("Starting calculation task: {} {} {} {} {} {}", cs.a, cs.g, cs.mu, cs.beta, cs.a, cs.n)
     ss = SectorSplit()
     max_t1, max_t2 = ss.split_scan(f, limits, [[-3, 3], [-2, 6]], [1, 1], 0.001)
     max_value = f(max_t1, max_t2)
