@@ -106,6 +106,7 @@ async def get_coefficient_setup_by_id(id: int, db_session: Session = Depends(get
 async def save_coefficient_setup(request: CoefficientSetup, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
     request.user_id = user.id
     storage.save_coefficient_setup(db_session, request)
+
 @app.post("/coefficient_setups/{id}/calculate/", response_model=CalculationResult)
 async def save_coefficient_setup(id: int, db_session: Session = Depends(get_db_session), user: User = Depends(require_researcher_authorization)):
     coefficient_setup = storage.get_coefficient_setup_by_id(db_session, id)
