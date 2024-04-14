@@ -9,6 +9,8 @@ def calculate(cs: CoefficientSetup) -> CalculationResult:
         return cs.a * (cs.g * cs.mu * ((t2 - t1) ** cs.n + (cs.beta * cs.a - t1) ** cs.n))
 
     limits = [
+        lambda t1, t2: -3 <= t1 <= 3,
+        lambda t1, t2: -2 <= t2 <= 6,
         lambda t1, t2: t1 - t2 >= -3
     ]
 
